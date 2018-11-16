@@ -1,0 +1,285 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <!-- 使用Maven构建Spring Boot项目 -->
+  
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com</groupId>
+  <artifactId>springboot</artifactId>
+  <packaging>jar</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>springboot Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+
+  <!-- 继承配置好的外部依赖管理 -->
+  <parent>
+	  <groupId>org.springframework.boot</groupId>
+	  <artifactId>spring-boot-starter-parent</artifactId>
+	  <version>1.5.6.RELEASE</version><!-- 版本非常关键 -->
+	  <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+  
+  <!-- 声明相应依赖的版本信息 -->
+  <properties>
+	  <java.version>1.7</java.version>
+	  <hadoop.version>2.6.5</hadoop.version>
+	  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	  <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+  
+  <dependencies>
+  	  <!-- starter起步依赖 -->
+	  <dependency>
+	      <groupId>org.springframework.boot</groupId>
+	      <artifactId>spring-boot-starter-test</artifactId>
+	      <scope>test</scope>
+	  </dependency>
+	  <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-jdbc</artifactId>
+     </dependency>
+     <dependency>
+	      <groupId>org.springframework.boot</groupId>
+	      <artifactId>spring-boot-starter-web</artifactId>
+	  </dependency>
+	  <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-aop</artifactId>
+      </dependency>
+      <dependency>
+		  <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot-starter-actuator</artifactId>
+	  </dependency>
+	  <dependency>
+		  <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot-starter-security</artifactId>
+	  </dependency>
+	  <!-- thymeleaf模板引擎 -->
+	  <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-thymeleaf</artifactId>
+     </dependency>
+     <dependency>
+         <groupId>org.mybatis.spring.boot</groupId>
+         <artifactId>mybatis-spring-boot-starter</artifactId>
+         <version>1.3.0</version>
+     </dependency>
+     <!-- Redis数据库 -->
+     <dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-redis</artifactId>
+	    <version>1.3.6.RELEASE</version>
+	</dependency>
+	<dependency>
+        <groupId>org.redisson</groupId>
+        <artifactId>redisson</artifactId>
+        <version>2.10.4</version>
+    </dependency>
+	<!-- 消息队列ActiveMQ -->
+	<dependency>  
+        <groupId>org.springframework.boot</groupId>  
+        <artifactId>spring-boot-starter-activemq</artifactId>  
+    </dependency>
+    <dependency>  
+        <groupId>org.apache.activemq</groupId>  
+        <artifactId>activemq-pool</artifactId>
+    </dependency> 
+    <!-- oracle数据源驱动 -->
+    <dependency>
+		<groupId>com.oracle</groupId>
+		<artifactId>ojdbc14</artifactId>
+		<version>10.2.0.3.0</version>
+	</dependency>
+	<!-- alibaba的druid数据库连接池 -->
+	<dependency>
+	    <groupId>com.alibaba</groupId>
+	    <artifactId>druid</artifactId>
+	    <version>1.0.11</version>
+	</dependency> 
+	<dependency>
+	    <groupId>com.alibaba</groupId>
+	    <artifactId>druid-spring-boot-starter</artifactId>
+	    <version>1.1.0</version>
+	</dependency>
+	<dependency>
+		<groupId>com.alibaba</groupId>
+		<artifactId>fastjson</artifactId>
+		<version>1.1.41</version>
+	</dependency>
+     <!-- 分页插件 -->
+     <dependency>
+         <groupId>com.github.pagehelper</groupId>
+         <artifactId>pagehelper-spring-boot-starter</artifactId>
+         <version>1.1.2</version>
+     </dependency>
+     <!-- XML解析器fasterxml -->
+     <dependency>
+         <groupId>com.fasterxml.jackson.core</groupId>
+         <artifactId>jackson-core</artifactId>
+     </dependency>
+     <dependency>
+         <groupId>com.fasterxml.jackson.core</groupId>
+         <artifactId>jackson-databind</artifactId>
+     </dependency>
+     <dependency>
+         <groupId>com.fasterxml.jackson.datatype</groupId>
+         <artifactId>jackson-datatype-joda</artifactId>
+     </dependency>
+     <dependency>
+         <groupId>com.fasterxml.jackson.module</groupId>
+         <artifactId>jackson-module-parameter-names</artifactId>
+     </dependency>
+     <!-- Apache Common常用工具 -->
+     <dependency>
+     	  <groupId>commons-io</groupId>
+    	  <artifactId>commons-io</artifactId>
+    	  <version>2.6</version>
+     </dependency>
+     <dependency>
+	    <groupId>commons-lang</groupId>
+	    <artifactId>commons-lang</artifactId>
+	    <version>2.6</version>
+	</dependency>
+	<!-- Swagger2文档构建工具 -->
+	<dependency>
+	    <groupId>io.springfox</groupId>
+	    <artifactId>springfox-swagger2</artifactId>
+	    <version>2.8.0</version>
+	</dependency>
+	<dependency>
+	    <groupId>io.springfox</groupId>
+	    <artifactId>springfox-swagger-ui</artifactId>
+	    <version>2.8.0</version>
+	</dependency>
+	<!-- 定时任务quartz -->
+	<dependency>
+	    <groupId>org.quartz-scheduler</groupId>
+	    <artifactId>quartz</artifactId>
+	    <version>2.2.3</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.quartz-scheduler</groupId>
+	    <artifactId>quartz-jobs</artifactId>
+	    <version>2.2.3</version>
+	</dependency>
+	<!-- 安全框架Shiro -->
+	<dependency>
+	    <groupId>org.apache.shiro</groupId>
+	    <artifactId>shiro-spring</artifactId>
+	    <version>1.4.0</version>
+	</dependency>
+	<!-- 分布式服务框架Dubbo和分布式应用程序协调服务Zookeeper -->
+	<dependency>
+         <groupId>io.dubbo.springboot</groupId>
+         <artifactId>spring-boot-starter-dubbo</artifactId>
+         <version>1.0.0</version>
+     </dependency>
+     <!-- 分布式文件系统hadoop -->
+     	<dependency>  
+            <groupId>org.apache.hadoop</groupId>  
+            <artifactId>hadoop-common</artifactId>  
+            <version>${hadoop.version}</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>org.apache.hadoop</groupId>  
+            <artifactId>hadoop-hdfs</artifactId>  
+            <version>${hadoop.version}</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>org.apache.hadoop</groupId>  
+            <artifactId>hadoop-client</artifactId>  
+            <version>${hadoop.version}</version>  
+        </dependency>
+        <dependency>
+            <groupId>jdk.tools</groupId>
+            <artifactId>jdk.tools</artifactId>
+            <version>${java.version}</version>
+            <scope>system</scope>
+            <systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
+		</dependency>
+		<!-- 消息队列RabbitMQ -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+		<!-- 客户端消息通信websocket -->  
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+  </dependencies>
+  
+  <build>
+    <finalName>springboot</finalName>
+    <plugins>
+    	<plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>repackage</goal>
+                </goals>
+              </execution>
+            </executions>
+            <dependencies>
+            	<!-- 热部署功能 -->
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>springloaded</artifactId>
+                    <version>1.2.5.RELEASE</version>
+                </dependency>
+            </dependencies>
+        </plugin>
+        <!-- mybatis generator 自动生成代码插件 -->
+        <plugin>
+            <groupId>org.mybatis.generator</groupId>
+            <artifactId>mybatis-generator-maven-plugin</artifactId>
+            <version>1.3.2</version>
+            <configuration>
+                <configurationFile>${basedir}/src/main/resources/generator/generatorConfig.xml</configurationFile>
+                <overwrite>true</overwrite>
+                <verbose>true</verbose>
+            </configuration>
+        </plugin>
+        <!-- 过滤后缀为pem、pfx的证书文件 -->
+        <!--  
+        <plugin>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-resources-plugin</artifactId>
+		    <configuration><encoding>UTF-8</encoding>
+		        <nonFilteredFileExtensions>
+		            <nonFilteredFileExtension>cer</nonFilteredFileExtension>
+		            <nonFilteredFileExtension>pem</nonFilteredFileExtension>
+		            <nonFilteredFileExtension>pfx</nonFilteredFileExtension>
+		            <nonFilteredFileExtension>p12</nonFilteredFileExtension>
+		        </nonFilteredFileExtensions>
+		    </configuration>
+		</plugin>
+		-->
+    </plugins>
+    <!--防止mavan打包时遗漏xml和properties文件 -->
+    <resources>
+	    <resource>
+	    	<directory>src/main/java</directory>
+	      		<includes>
+	        		<include>**/*.properties</include>
+                    <include>**/*.xml</include>
+	      		</includes>
+	      		<filtering>true</filtering>
+	    </resource>
+	    <resource>
+	      	<directory>src/main/resources</directory>
+	      		<includes>
+	        		<include>**/*</include>
+	      		</includes>
+	      		<filtering>true</filtering>
+	    </resource>
+  	</resources>
+  </build>
+  
+</project>

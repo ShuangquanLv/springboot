@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxx.dao.MemberMapper">
+  <resultMap id="BaseResultMap" type="com.xxx.model.Member">
+    <id column="MEMID" jdbcType="VARCHAR" property="memid" />
+    <result column="TYPE" jdbcType="CHAR" property="type" />
+    <result column="MEMGROUP" jdbcType="CHAR" property="memgroup" />
+    <result column="ENROLNAME" jdbcType="VARCHAR" property="enrolname" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="TRANPASSWORD" jdbcType="VARCHAR" property="tranpassword" />
+    <result column="LOGINCOUNT" jdbcType="DECIMAL" property="logincount" />
+    <result column="LASTTIME" jdbcType="TIMESTAMP" property="lasttime" />
+    <result column="ENROLTIME" jdbcType="TIMESTAMP" property="enroltime" />
+    <result column="ENROLIP" jdbcType="VARCHAR" property="enrolip" />
+    <result column="UPDATETIME" jdbcType="TIMESTAMP" property="updatetime" />
+    <result column="LASTLOGINIP" jdbcType="VARCHAR" property="lastloginip" />
+    <result column="RECOMCODE" jdbcType="VARCHAR" property="recomcode" />
+    <result column="ISPHONELOG" jdbcType="CHAR" property="isphonelog" />
+    <result column="ISBONUS" jdbcType="CHAR" property="isbonus" />
+    <result column="ENROLTYPE" jdbcType="CHAR" property="enroltype" />
+    <result column="ISFIRSTINVEST" jdbcType="CHAR" property="isfirstinvest" />
+    <result column="NOINVEST" jdbcType="CHAR" property="noinvest" />
+    <result column="ISFREEZE" jdbcType="CHAR" property="isfreeze" />
+    <result column="MAILRECIVE" jdbcType="CHAR" property="mailrecive" />
+    <result column="INVESTWARN" jdbcType="CHAR" property="investwarn" />
+    <result column="REALNAME" jdbcType="VARCHAR" property="realname" />
+    <result column="ISCHANGETRANPWD" jdbcType="CHAR" property="ischangetranpwd" />
+    <result column="MEMBERID" jdbcType="VARCHAR" property="memberid" />
+    <result column="ISCHANGEPWD" jdbcType="CHAR" property="ischangepwd" />
+    <result column="ISIAM" jdbcType="CHAR" property="isiam" />
+    <result column="IAMTIME" jdbcType="TIMESTAMP" property="iamtime" />
+    <result column="TIPSID" jdbcType="VARCHAR" property="tipsid" />
+    <result column="THIRDPARTYTIME" jdbcType="TIMESTAMP" property="thirdpartytime" />
+    <result column="THIRDPARTYUSER" jdbcType="VARCHAR" property="thirdpartyuser" />
+    <result column="PLATFORM_USER_NO" jdbcType="VARCHAR" property="platformUserNo" />
+    <result column="ACTIVITY_STATUS" jdbcType="VARCHAR" property="activityStatus" />
+    <result column="USER_ROLE" jdbcType="VARCHAR" property="userRole" />
+    <result column="AUTHLIST" jdbcType="VARCHAR" property="authlist" />
+    <result column="LINKSIGN_CUSTOMERID" jdbcType="VARCHAR" property="linksignCustomerid" />
+    <result column="ACTIVITY_TIME" jdbcType="TIMESTAMP" property="activityTime" />
+    <result column="FAILTIME" jdbcType="TIMESTAMP" property="failtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    MEMID, TYPE, MEMGROUP, ENROLNAME, PASSWORD, TRANPASSWORD, LOGINCOUNT, LASTTIME, ENROLTIME, 
+    ENROLIP, UPDATETIME, LASTLOGINIP, RECOMCODE, ISPHONELOG, ISBONUS, ENROLTYPE, ISFIRSTINVEST, 
+    NOINVEST, ISFREEZE, MAILRECIVE, INVESTWARN, REALNAME, ISCHANGETRANPWD, MEMBERID, 
+    ISCHANGEPWD, ISIAM, IAMTIME, TIPSID, THIRDPARTYTIME, THIRDPARTYUSER, PLATFORM_USER_NO, 
+    ACTIVITY_STATUS, USER_ROLE, AUTHLIST, LINKSIGN_CUSTOMERID, ACTIVITY_TIME, FAILTIME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from P2P_MEMBER
+    where MEMID = #{memid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from P2P_MEMBER
+    where MEMID = #{memid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xxx.model.Member">
+    insert into P2P_MEMBER (MEMID, TYPE, MEMGROUP, 
+      ENROLNAME, PASSWORD, TRANPASSWORD, 
+      LOGINCOUNT, LASTTIME, ENROLTIME, 
+      ENROLIP, UPDATETIME, LASTLOGINIP, 
+      RECOMCODE, ISPHONELOG, ISBONUS, 
+      ENROLTYPE, ISFIRSTINVEST, NOINVEST, 
+      ISFREEZE, MAILRECIVE, INVESTWARN, 
+      REALNAME, ISCHANGETRANPWD, MEMBERID, 
+      ISCHANGEPWD, ISIAM, IAMTIME, 
+      TIPSID, THIRDPARTYTIME, THIRDPARTYUSER, 
+      PLATFORM_USER_NO, ACTIVITY_STATUS, USER_ROLE, 
+      AUTHLIST, LINKSIGN_CUSTOMERID, ACTIVITY_TIME, 
+      FAILTIME)
+    values (#{memid,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, #{memgroup,jdbcType=CHAR}, 
+      #{enrolname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{tranpassword,jdbcType=VARCHAR}, 
+      #{logincount,jdbcType=DECIMAL}, #{lasttime,jdbcType=TIMESTAMP}, #{enroltime,jdbcType=TIMESTAMP}, 
+      #{enrolip,jdbcType=VARCHAR}, #{updatetime,jdbcType=TIMESTAMP}, #{lastloginip,jdbcType=VARCHAR}, 
+      #{recomcode,jdbcType=VARCHAR}, #{isphonelog,jdbcType=CHAR}, #{isbonus,jdbcType=CHAR}, 
+      #{enroltype,jdbcType=CHAR}, #{isfirstinvest,jdbcType=CHAR}, #{noinvest,jdbcType=CHAR}, 
+      #{isfreeze,jdbcType=CHAR}, #{mailrecive,jdbcType=CHAR}, #{investwarn,jdbcType=CHAR}, 
+      #{realname,jdbcType=VARCHAR}, #{ischangetranpwd,jdbcType=CHAR}, #{memberid,jdbcType=VARCHAR}, 
+      #{ischangepwd,jdbcType=CHAR}, #{isiam,jdbcType=CHAR}, #{iamtime,jdbcType=TIMESTAMP}, 
+      #{tipsid,jdbcType=VARCHAR}, #{thirdpartytime,jdbcType=TIMESTAMP}, #{thirdpartyuser,jdbcType=VARCHAR}, 
+      #{platformUserNo,jdbcType=VARCHAR}, #{activityStatus,jdbcType=VARCHAR}, #{userRole,jdbcType=VARCHAR}, 
+      #{authlist,jdbcType=VARCHAR}, #{linksignCustomerid,jdbcType=VARCHAR}, #{activityTime,jdbcType=TIMESTAMP}, 
+      #{failtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xxx.model.Member">
+    insert into P2P_MEMBER
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="memid != null">
+        MEMID,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="memgroup != null">
+        MEMGROUP,
+      </if>
+      <if test="enrolname != null">
+        ENROLNAME,
+      </if>
+      <if test="password != null">
+        PASSWORD,
+      </if>
+      <if test="tranpassword != null">
+        TRANPASSWORD,
+      </if>
+      <if test="logincount != null">
+        LOGINCOUNT,
+      </if>
+      <if test="lasttime != null">
+        LASTTIME,
+      </if>
+      <if test="enroltime != null">
+        ENROLTIME,
+      </if>
+      <if test="enrolip != null">
+        ENROLIP,
+      </if>
+      <if test="updatetime != null">
+        UPDATETIME,
+      </if>
+      <if test="lastloginip != null">
+        LASTLOGINIP,
+      </if>
+      <if test="recomcode != null">
+        RECOMCODE,
+      </if>
+      <if test="isphonelog != null">
+        ISPHONELOG,
+      </if>
+      <if test="isbonus != null">
+        ISBONUS,
+      </if>
+      <if test="enroltype != null">
+        ENROLTYPE,
+      </if>
+      <if test="isfirstinvest != null">
+        ISFIRSTINVEST,
+      </if>
+      <if test="noinvest != null">
+        NOINVEST,
+      </if>
+      <if test="isfreeze != null">
+        ISFREEZE,
+      </if>
+      <if test="mailrecive != null">
+        MAILRECIVE,
+      </if>
+      <if test="investwarn != null">
+        INVESTWARN,
+      </if>
+      <if test="realname != null">
+        REALNAME,
+      </if>
+      <if test="ischangetranpwd != null">
+        ISCHANGETRANPWD,
+      </if>
+      <if test="memberid != null">
+        MEMBERID,
+      </if>
+      <if test="ischangepwd != null">
+        ISCHANGEPWD,
+      </if>
+      <if test="isiam != null">
+        ISIAM,
+      </if>
+      <if test="iamtime != null">
+        IAMTIME,
+      </if>
+      <if test="tipsid != null">
+        TIPSID,
+      </if>
+      <if test="thirdpartytime != null">
+        THIRDPARTYTIME,
+      </if>
+      <if test="thirdpartyuser != null">
+        THIRDPARTYUSER,
+      </if>
+      <if test="platformUserNo != null">
+        PLATFORM_USER_NO,
+      </if>
+      <if test="activityStatus != null">
+        ACTIVITY_STATUS,
+      </if>
+      <if test="userRole != null">
+        USER_ROLE,
+      </if>
+      <if test="authlist != null">
+        AUTHLIST,
+      </if>
+      <if test="linksignCustomerid != null">
+        LINKSIGN_CUSTOMERID,
+      </if>
+      <if test="activityTime != null">
+        ACTIVITY_TIME,
+      </if>
+      <if test="failtime != null">
+        FAILTIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="memid != null">
+        #{memid,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="memgroup != null">
+        #{memgroup,jdbcType=CHAR},
+      </if>
+      <if test="enrolname != null">
+        #{enrolname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="tranpassword != null">
+        #{tranpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="logincount != null">
+        #{logincount,jdbcType=DECIMAL},
+      </if>
+      <if test="lasttime != null">
+        #{lasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="enroltime != null">
+        #{enroltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="enrolip != null">
+        #{enrolip,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastloginip != null">
+        #{lastloginip,jdbcType=VARCHAR},
+      </if>
+      <if test="recomcode != null">
+        #{recomcode,jdbcType=VARCHAR},
+      </if>
+      <if test="isphonelog != null">
+        #{isphonelog,jdbcType=CHAR},
+      </if>
+      <if test="isbonus != null">
+        #{isbonus,jdbcType=CHAR},
+      </if>
+      <if test="enroltype != null">
+        #{enroltype,jdbcType=CHAR},
+      </if>
+      <if test="isfirstinvest != null">
+        #{isfirstinvest,jdbcType=CHAR},
+      </if>
+      <if test="noinvest != null">
+        #{noinvest,jdbcType=CHAR},
+      </if>
+      <if test="isfreeze != null">
+        #{isfreeze,jdbcType=CHAR},
+      </if>
+      <if test="mailrecive != null">
+        #{mailrecive,jdbcType=CHAR},
+      </if>
+      <if test="investwarn != null">
+        #{investwarn,jdbcType=CHAR},
+      </if>
+      <if test="realname != null">
+        #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="ischangetranpwd != null">
+        #{ischangetranpwd,jdbcType=CHAR},
+      </if>
+      <if test="memberid != null">
+        #{memberid,jdbcType=VARCHAR},
+      </if>
+      <if test="ischangepwd != null">
+        #{ischangepwd,jdbcType=CHAR},
+      </if>
+      <if test="isiam != null">
+        #{isiam,jdbcType=CHAR},
+      </if>
+      <if test="iamtime != null">
+        #{iamtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tipsid != null">
+        #{tipsid,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdpartytime != null">
+        #{thirdpartytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="thirdpartyuser != null">
+        #{thirdpartyuser,jdbcType=VARCHAR},
+      </if>
+      <if test="platformUserNo != null">
+        #{platformUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="activityStatus != null">
+        #{activityStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="userRole != null">
+        #{userRole,jdbcType=VARCHAR},
+      </if>
+      <if test="authlist != null">
+        #{authlist,jdbcType=VARCHAR},
+      </if>
+      <if test="linksignCustomerid != null">
+        #{linksignCustomerid,jdbcType=VARCHAR},
+      </if>
+      <if test="activityTime != null">
+        #{activityTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="failtime != null">
+        #{failtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xxx.model.Member">
+    update P2P_MEMBER
+    <set>
+      <if test="type != null">
+        TYPE = #{type,jdbcType=CHAR},
+      </if>
+      <if test="memgroup != null">
+        MEMGROUP = #{memgroup,jdbcType=CHAR},
+      </if>
+      <if test="enrolname != null">
+        ENROLNAME = #{enrolname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="tranpassword != null">
+        TRANPASSWORD = #{tranpassword,jdbcType=VARCHAR},
+      </if>
+      <if test="logincount != null">
+        LOGINCOUNT = #{logincount,jdbcType=DECIMAL},
+      </if>
+      <if test="lasttime != null">
+        LASTTIME = #{lasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="enroltime != null">
+        ENROLTIME = #{enroltime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="enrolip != null">
+        ENROLIP = #{enrolip,jdbcType=VARCHAR},
+      </if>
+      <if test="updatetime != null">
+        UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastloginip != null">
+        LASTLOGINIP = #{lastloginip,jdbcType=VARCHAR},
+      </if>
+      <if test="recomcode != null">
+        RECOMCODE = #{recomcode,jdbcType=VARCHAR},
+      </if>
+      <if test="isphonelog != null">
+        ISPHONELOG = #{isphonelog,jdbcType=CHAR},
+      </if>
+      <if test="isbonus != null">
+        ISBONUS = #{isbonus,jdbcType=CHAR},
+      </if>
+      <if test="enroltype != null">
+        ENROLTYPE = #{enroltype,jdbcType=CHAR},
+      </if>
+      <if test="isfirstinvest != null">
+        ISFIRSTINVEST = #{isfirstinvest,jdbcType=CHAR},
+      </if>
+      <if test="noinvest != null">
+        NOINVEST = #{noinvest,jdbcType=CHAR},
+      </if>
+      <if test="isfreeze != null">
+        ISFREEZE = #{isfreeze,jdbcType=CHAR},
+      </if>
+      <if test="mailrecive != null">
+        MAILRECIVE = #{mailrecive,jdbcType=CHAR},
+      </if>
+      <if test="investwarn != null">
+        INVESTWARN = #{investwarn,jdbcType=CHAR},
+      </if>
+      <if test="realname != null">
+        REALNAME = #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="ischangetranpwd != null">
+        ISCHANGETRANPWD = #{ischangetranpwd,jdbcType=CHAR},
+      </if>
+      <if test="memberid != null">
+        MEMBERID = #{memberid,jdbcType=VARCHAR},
+      </if>
+      <if test="ischangepwd != null">
+        ISCHANGEPWD = #{ischangepwd,jdbcType=CHAR},
+      </if>
+      <if test="isiam != null">
+        ISIAM = #{isiam,jdbcType=CHAR},
+      </if>
+      <if test="iamtime != null">
+        IAMTIME = #{iamtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tipsid != null">
+        TIPSID = #{tipsid,jdbcType=VARCHAR},
+      </if>
+      <if test="thirdpartytime != null">
+        THIRDPARTYTIME = #{thirdpartytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="thirdpartyuser != null">
+        THIRDPARTYUSER = #{thirdpartyuser,jdbcType=VARCHAR},
+      </if>
+      <if test="platformUserNo != null">
+        PLATFORM_USER_NO = #{platformUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="activityStatus != null">
+        ACTIVITY_STATUS = #{activityStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="userRole != null">
+        USER_ROLE = #{userRole,jdbcType=VARCHAR},
+      </if>
+      <if test="authlist != null">
+        AUTHLIST = #{authlist,jdbcType=VARCHAR},
+      </if>
+      <if test="linksignCustomerid != null">
+        LINKSIGN_CUSTOMERID = #{linksignCustomerid,jdbcType=VARCHAR},
+      </if>
+      <if test="activityTime != null">
+        ACTIVITY_TIME = #{activityTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="failtime != null">
+        FAILTIME = #{failtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where MEMID = #{memid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xxx.model.Member">
+    update P2P_MEMBER
+    set TYPE = #{type,jdbcType=CHAR},
+      MEMGROUP = #{memgroup,jdbcType=CHAR},
+      ENROLNAME = #{enrolname,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      TRANPASSWORD = #{tranpassword,jdbcType=VARCHAR},
+      LOGINCOUNT = #{logincount,jdbcType=DECIMAL},
+      LASTTIME = #{lasttime,jdbcType=TIMESTAMP},
+      ENROLTIME = #{enroltime,jdbcType=TIMESTAMP},
+      ENROLIP = #{enrolip,jdbcType=VARCHAR},
+      UPDATETIME = #{updatetime,jdbcType=TIMESTAMP},
+      LASTLOGINIP = #{lastloginip,jdbcType=VARCHAR},
+      RECOMCODE = #{recomcode,jdbcType=VARCHAR},
+      ISPHONELOG = #{isphonelog,jdbcType=CHAR},
+      ISBONUS = #{isbonus,jdbcType=CHAR},
+      ENROLTYPE = #{enroltype,jdbcType=CHAR},
+      ISFIRSTINVEST = #{isfirstinvest,jdbcType=CHAR},
+      NOINVEST = #{noinvest,jdbcType=CHAR},
+      ISFREEZE = #{isfreeze,jdbcType=CHAR},
+      MAILRECIVE = #{mailrecive,jdbcType=CHAR},
+      INVESTWARN = #{investwarn,jdbcType=CHAR},
+      REALNAME = #{realname,jdbcType=VARCHAR},
+      ISCHANGETRANPWD = #{ischangetranpwd,jdbcType=CHAR},
+      MEMBERID = #{memberid,jdbcType=VARCHAR},
+      ISCHANGEPWD = #{ischangepwd,jdbcType=CHAR},
+      ISIAM = #{isiam,jdbcType=CHAR},
+      IAMTIME = #{iamtime,jdbcType=TIMESTAMP},
+      TIPSID = #{tipsid,jdbcType=VARCHAR},
+      THIRDPARTYTIME = #{thirdpartytime,jdbcType=TIMESTAMP},
+      THIRDPARTYUSER = #{thirdpartyuser,jdbcType=VARCHAR},
+      PLATFORM_USER_NO = #{platformUserNo,jdbcType=VARCHAR},
+      ACTIVITY_STATUS = #{activityStatus,jdbcType=VARCHAR},
+      USER_ROLE = #{userRole,jdbcType=VARCHAR},
+      AUTHLIST = #{authlist,jdbcType=VARCHAR},
+      LINKSIGN_CUSTOMERID = #{linksignCustomerid,jdbcType=VARCHAR},
+      ACTIVITY_TIME = #{activityTime,jdbcType=TIMESTAMP},
+      FAILTIME = #{failtime,jdbcType=TIMESTAMP}
+    where MEMID = #{memid,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 查询所有会员 -->
+  <select id="selectAllMember" resultMap="BaseResultMap">
+   	select 
+    <include refid="Base_Column_List" />
+    from P2P_MEMBER
+  </select>
+</mapper>

@@ -1,0 +1,8 @@
+# 生产环境下特殊参数定义
+file:
+    upload:
+        # 上传文件存放目录绝对地址
+        dir: E:\download\prod\
+    download:
+        # 下载文件存放目录绝对地址
+        dir: E:\download\prod\

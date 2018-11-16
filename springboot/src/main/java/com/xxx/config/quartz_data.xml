@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 初始加载时需要立即启动的定时任务 -->
+<job-scheduling-data
+    xmlns="http://www.quartz-scheduler.org/xml/JobSchedulingData"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.quartz-scheduler.org/xml/JobSchedulingData http://www.quartz-scheduler.org/xml/job_scheduling_data_1_8.xsd"
+    version="1.8">
+    <!--在执行作业和触发器之前执行的命令-->
+    <pre-processing-commands>
+    	<!-- 删除指定组中的所有作业，如果是“*”,则删除所有组中的作业，同时也会删除与作业有关的触发器 -->
+    	<delete-jobs-in-group>*</delete-jobs-in-group>
+    	<!-- 删除指定组中的所有触发器，如果是“*”,则删除所有组中的触发器 -->
+    	<delete-triggers-in-group>*</delete-triggers-in-group>
+    	<!-- 删除指定的作业，同时也会删除与它关联的触发器 -->
+    	<delete-job>
+            <name>job01</name>
+            <group>group01</group>
+        </delete-job>
+        <!-- 删除指定的触犯器 -->
+        <delete-trigger>
+            <name>trigger01</name>
+            <group>group01</group>
+        </delete-trigger>
+    </pre-processing-commands> 
+    <schedule> 
+        <job>
+            <name>job01</name> 
+            <group>group01</group> 
+            <description>The 1st job.</description> 
+            <job-class>com.xxx.schedule.SimpleTask</job-class> 
+            <job-data-map>
+            	<!-- entry可以设置多个-->
+                <entry>
+                    <key>name</key>
+                    <value>kevin</value>
+                </entry>
+            </job-data-map>
+        </job>
+        <!-- Trigger分为simple，cron，date-interval三种类型，一个trigger中只能指定一种类型--> 
+        <trigger>
+            <cron>
+                <name>trigger01</name> 
+                <group>group01</group>
+                <description>The 1st trigger.</description> 
+                <job-name>job01</job-name> 
+                <job-group>group01</job-group> 
+                <cron-expression>0/30 * 12 * * ?</cron-expression> 
+            </cron> 
+        </trigger>
+        <trigger>
+            <cron>
+                <name>trigger02</name> 
+                <group>group02</group>
+                <description>The 2nd trigger.</description> 
+                <job-name>job01</job-name> 
+                <job-group>group01</job-group> 
+                <cron-expression>0/30 * 11 * * ?</cron-expression> 
+            </cron> 
+        </trigger> 
+    </schedule> 
+</job-scheduling-data> 

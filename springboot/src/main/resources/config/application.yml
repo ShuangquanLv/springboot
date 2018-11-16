@@ -1,0 +1,190 @@
+# 服务器
+server:
+  # 开启http服务
+  port: 8080
+  # 开启https服务
+#  port: 8443
+#  ssl:
+#    key-store: classpath:mykeys.jks
+#    key-store-password: 123456
+#    key-password: 123456
+
+spring:
+    # 环境选择(test, dev, prod)，通常在application.yml文件中配置多个环境通用参数，并通过active激活指定环境
+    profiles:
+        active: prod
+    # 数据源    
+    datasource:
+        name: test
+        url: jdbc:oracle:thin:@192.168.3.43:1521:orcl
+        username: syp2p
+        password: syp2p
+        # 使用druid数据源
+        type: com.alibaba.druid.pool.DruidDataSource
+        # 数据源驱动类，oracle.jdbc.driver.OracleDriver或者com.mysql.jdbc.Driver
+        driver-class-name: oracle.jdbc.driver.OracleDriver
+        # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+        filters: stat,wall,log4j
+        maxActive: 20
+        initialSize: 6
+        maxWait: 60000
+        minIdle: 1
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: SELECT 'X' FROM DUAL
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 20
+    # 模板引擎thymeleaf默认配置项
+    thymeleaf:
+        cache: true
+        check-template-location: true
+        content-type: text/html
+        enabled: true
+        encoding: UTF-8
+        mode: HTML5
+        prefix: classpath:/templates/
+        suffix: .html
+    # Redis单机服务配置
+    redis:
+        # 数据库索引（默认为0）
+        database: 0
+        # 单机服务器地址
+        #host: 192.168.3.157
+        # 单机服务器端口
+        #port: 6379
+        # 服务器连接密码(默认密码为空)
+        password:
+        # 连接池配置
+        pool:
+            # 连接池中的最大空闲连接
+            max-idle: 8
+            # 连接池中的最小空闲连接
+            min-idle: 0
+            # 连接池最大连接数（使用负值表示没有限制）
+            max-active: 8
+            # 连接池最大阻塞等待时间（使用负值表示没有限制）
+            max-wait: -1
+        # 连接超时时间（毫秒）
+        timeout: 0
+        # 哨兵模式
+        #sentinel:
+            # Redis服务器的名称
+            #master: 
+            # 主机：端口对，用逗号分隔的列表
+            #nodes: 
+        # 集群模式（一旦开启集群模式，单机模式的部分配置就会被覆盖）
+        cluster:
+            # 集群环境下，执行命令时要遵循的最大重定向数目
+            max-redirects: 10
+            # 集群环境下，以逗号分隔的redis主机:端口
+            nodes: 192.168.3.64:7000,192.168.3.64:7002,192.168.3.64:7003,192.168.3.65:7004,192.168.3.65:7005,192.168.3.65:7006
+    # 上传文件大小限制
+    http:
+        multipart:
+            # 单个文件上限
+            maxFileSize: 200Kb
+            # 单个请求上限
+            maxRequestSize: 10Mb
+    # 消息队列ActiveMQ
+    activemq:
+        # 外部ActiveMQ服务取代默认in-memory
+        broker-url: tcp://192.168.3.155:61616
+        # 使用ActiveMQ集群
+        #broker-url: failover:(tcp://localhost:61616,tcp://localhost:61617)
+        close-timeout: 5000
+        send-timeout: 3000
+        # 官方实例用内存
+        in-memory: false
+        # 连接池
+        pool:
+            # 设置为ture时，需要加入依赖包activemq-pool
+            enabled: true
+            # 最大连接数
+            max-connections: 100
+            # 空闲的连接过期时间，默认为30秒
+            #idle-timeout: 30000
+            # 强制的连接过期时间，与idleTimeout的区别在于：idleTimeout是在连接空闲一段时间失效，而expiryTimeout不管当前连接的情况，只要达到指定时间就失效。默认为0，never
+            #expiry-timeout: 0
+    # 消息队列RabbitMQ
+    rabbitmq:
+        host: 192.168.3.111
+        port: 5672
+        username: rabbit
+        password: rabbit
+        # 发送端开启消息发送确认
+        publisher-confirms: true
+        publisher-returns: true
+        template:
+            mandatory: true
+    # 配置dubbo服务的生产者
+#    dubbo:
+#        application:
+#            name: provider
+#        registry:
+#            address: zookeeper://127.0.0.1:2181
+#        protocol:
+#            name: dubbo
+#            port: 20880
+#        scan: com.xxx.service.impl
+    # 配置dubbo服务的消费者
+#    dubbo:
+#        application:
+#            name: consumer
+#        registry:
+#            address: zookeeper://127.0.0.1:2181    
+#        scan: com.xxx.service.impl
+        
+# 集成整合mybatis
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  config-location: classpath:mybatis/mybatis-config.xml
+  type-aliases-package: com.xxx.model
+  
+# 分页插件pagehelper
+pagehelper:
+    helperDialect: oracle
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+    
+# 日志框架
+# spring boot 默认从src/main/resources目录下寻找(Do not use \t(TAB) for indentation)
+logging:
+    config: classpath:config/logback-spring.xml
+
+# 启停服务、安全验证
+endpoints:
+    shutdown:
+        # 启用shutdown
+        enabled: true
+        # 默认值是/shutdown，基于安全考虑，隐藏默认的命令：curl -X POST http://host:port/shutdown，而修改为：curl -X POST http://host:port/admin/shutdown
+        path: /admin/shutdown
+        # 敏感（禁用=false，开启=true）
+        sensitive: true
+# 给所有的管理操作加上一个统一的上下文，配置独立的端口，并限制指定IP访问（一般限定为本机）
+management:
+    security:
+        # 是否启用下面的安全验证security
+        enabled: true
+        # 角色
+        role: SUPERUSER
+    # 使用独立的url来监控服务和应用，隐藏默认配置，例如使用shutdown时，需要访问/manage/{path}
+    context-path: /manage
+    # 设置actuator功能的ip、端口，服务器需要打开相应端口给本项目，否则访问会被拒绝
+    port: 8089
+    address: 127.0.0.1
+# 进一步保证系统的安全，再给其加上一层 HTTP Basic Auth
+security:
+    basic:
+        # 启用
+        enabled: true
+        # /admin 下的请求才要求输入密码， 其他路径不受影响
+        path: /admin
+    user:
+        # 验证用户名
+        name: admin
+        # 验证密码
+        password: admin               

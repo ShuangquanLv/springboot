@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Spring Boot 默认采用Logback管理日志 -->
+<configuration>
+    <!--存放日志文件的根目录-->
+    <property name="LOG_HOME" value="logs"/>
+
+    <property name="LOG_PREFIX" value="springboot"/>
+    <property name="LOG_DIR" value="${LOG_HOME}/%d{yyyyMMdd}"/>
+    <!--输出在控制台的格式-->
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-15.15t] [%c] %m%n"/>
+    <!--文件的最大值-->
+    <property name="MAX_FILE_SIZE" value="50MB"/>
+    <!--配置控制台输出-->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${LOG_PATTERN}</pattern>
+        </layout>
+    </appender>
+    <!--配置所有日志文件-->
+    <appender name="FILE_ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志文件的位置-->
+        <File>${LOG_HOME}/${LOG_PREFIX}-all.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--定义了日志的切分方式——把每一天的日志归档到一个文件中-->
+            <FileNamePattern>${LOG_DIR}/${LOG_PREFIX}-all%i.log</FileNamePattern>
+            <!--只保留最近90天的日志-->
+        	<maxHistory>90</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${LOG_PATTERN}</pattern>
+        </layout>
+    </appender>
+    <!--配置错误日志文件的位置-->
+    <appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!--过滤 Error-->
+            <level>ERROR</level>
+            <!--匹配到就禁止-->
+            <OnMismatch>DENY</OnMismatch>
+            <!--没有匹配到就允许-->
+            <OnMatch>ACCEPT</OnMatch>
+        </filter>
+        <File>${LOG_HOME}/${LOG_PREFIX}-err.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--定义了日志的切分方式——把每一天的日志归档到一个文件中-->
+            <FileNamePattern>${LOG_DIR}/${LOG_PREFIX}-err%i.log</FileNamePattern>
+            <!--只保留最近90天的日志-->
+        	<maxHistory>90</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>${LOG_PATTERN}</Pattern>
+        </layout>
+    </appender>
+    
+    <!-- 测试环境+开发环境. 多个使用逗号隔开. -->
+    <springProfile name="test,dev">
+    	<!--需要输出的日志的位置和级别-->
+	    <logger name="org.apache.zookeeper" level="INFO"/>
+	    <logger name="org.springframework" level="INFO"/>
+	    <logger name="com.alibaba" level="INFO"/>
+	    <logger name="org.apache.http" level="INFO"/>
+        <logger name="com.ibatis" level="INFO"/> 
+    	<logger name="java.sql" level="INFO"/>
+    </springProfile>
+
+    <!-- 生产环境. -->
+    <springProfile name="prod">
+        <logger name="org.apache.zookeeper" level="INFO"/>
+	    <logger name="org.springframework" level="INFO"/>
+	    <logger name="com.alibaba" level="INFO"/>
+	    <logger name="org.apache.http" level="INFO"/>
+    </springProfile>
+
+    <!-- 日志输出级别：INFO, DEBUG-->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE_ALL"/>
+        <appender-ref ref="FILE_ERROR"/>
+    </root>
+
+</configuration>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<!-- thymeleaf模板引擎页面 -->
+<head>
+<meta charset="UTF-8"/>
+<title>thymeleaf模板引擎页面</title>
+</head>
+<body>
+	 <table border="1">  
+       <tr>  
+         <th>用户名</th>  
+         <th>邮箱</th>  
+         <th>状态变量：index</th>  
+         <th>状态变量：count</th>  
+         <th>状态变量：size</th>  
+         <th>状态变量：current.userName</th>  
+         <th>状态变量：even</th>  
+         <th>状态变量：odd</th>  
+         <th>状态变量：first</th>  
+         <th>状态变量：last</th>  
+       </tr>  
+       <tr th:each="member,memberStatus:${members}">
+         <td th:text="${member.memid}">memid</td>
+         <td th:text="${member.enrolname}">enrolname</td>  
+         <td th:text="${memberStatus.index}">index</td> 	<!--  index:当前迭代对象的index（从0开始计算） --> 
+         <td th:text="${memberStatus.count}">count</td>  <!-- count: 当前迭代对象的index(从1开始计算) -->
+         <td th:text="${memberStatus.size}">size</td>  	<!-- size:被迭代对象的大小 -->
+         <td th:text="${memberStatus.current.logincount}">logincount</td> <!-- current:当前迭代变量 -->
+         <td th:text="${memberStatus.even}">even</td>  	<!-- even/odd:布尔值，当前循环是否是偶数/奇数（从0开始计算） -->
+         <td th:text="${memberStatus.odd}">odd</td>  
+         <td th:text="${memberStatus.first}">first</td>  <!-- first/last:布尔值，当前循环是否是第一个/最后一个 -->
+         <td th:text="${memberStatus.last}">last</td>  
+       </tr>  
+     </table>
+     <hr/>
+     <div>
+     	<form action="/file/upload" method="POST" enctype="multipart/form-data">
+     		文件：<input type="file" name="file" />
+     		<input type="submit" value="上传" />
+     	</form>
+     </div>
+     <hr/>
+     <div>
+     	<form action="/file/multi-upload" method="POST" enctype="multipart/form-data">
+     		文件1：<input type="file" name="file1" />
+     		文件2：<input type="file" name="file2" />
+     		文件3：<input type="file" name="file3" />
+     		<input type="submit" value="上传" />
+     	</form>
+     </div>
+     <hr/>
+     <div>
+     	<a href="/file/download?filename=20180309014910Z64LJE.jpg">下载</a>
+     	<a href="ws.html">WebSocket</a>
+     </div>
+</body>
+</html>

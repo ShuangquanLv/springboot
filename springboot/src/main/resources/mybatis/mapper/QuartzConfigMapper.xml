@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxx.dao.QuartzConfigMapper">
+  
+  <!-- 基本列 -->
+  <sql id="Base_Column_List">
+    id, job_name, job_class, job_group, job_desc, cron_exp, status
+  </sql>
+  
+  <!-- 查询当前所有定时任务列表 -->
+  <select id="selectAllQuartz" resultType="java.util.HashMap">
+   	select 
+    	<include refid="Base_Column_List" />
+    from quartz_config
+  </select>
+  
+</mapper>

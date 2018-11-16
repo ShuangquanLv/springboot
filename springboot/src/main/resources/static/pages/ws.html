@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<!-- 
+	在springboot中访问静态页面又需要进入controller，就需要将静态页面文件放到src/main/resources/static目录下。
+	引入本地JS、CSS文件 
+	当前页访问地址：http://localhost:8080/pages/ws.html
+	连接与断开：connect(), disconnect()
+	订阅与退订：subscribe(), unsubscribe()
+	确认与拒收：ack(), nack()
+	stomp事务支持：begin(), commit()/abort()
+-->
+
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>WebSocket通信</title>
+	</head>
+	<body>
+		<div>
+			<button onclick="openConn()">打开连接</button><button onclick="closeConn()">关闭连接</button><br/>
+			<span>消息内容：</span>
+			<input id="msg" name="msg" type="text"/>
+			<span>消息类型：</span>
+			<select id="msgtype" name="msgtype">
+				<option value="" selected="selected">---</option>
+				<option value="queue">点对点</option>
+				<option value="topic">广播</option>
+			</select>
+			<span>事务支持：</span>
+			<select id="msgtx" name="msgtx">
+				<option value="0" selected="selected">非事务</option>
+				<option value="1">事务提交</option>
+				<option value="2">事务回滚</option>
+			</select>
+			<button onclick="send()">发送</button><button onclick="clearMsg()">清空</button><br/>
+			<span>Destination：</span>
+			<input id="dest" name="dest" type="text"/><button onclick="subscribe()">订阅</button><button onclick="unsubscribe()">退订</button><br/>
+			<ul id="info"></ul>
+		</div>
+	</body>
+	<!-- 引入本地JS文件 -->
+	<!-- <script th:src="@{js/jquery-3.3.1.min.js}"></script> -->
+	<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script src="http://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+	<script src="https://cdn.bootcss.com/sockjs-client/1.1.4/sockjs.min.js"></script>
+	<script type="text/javascript">
+		var stompClient = null;
+		// 订阅成功后返回的包含了id属性的 JavaScript 对象，可作为 unsubscribe() 方法的参数
+		var subscription_queue = null;
+		var subscription_topic = null;
+		// 第二种方式退订（强烈推荐采用）
+		var sub_headers = new Array();
+		
+		function openConn(){
+			var socket = new SockJS("http://localhost:8080/ws");
+			stompClient = Stomp.over(socket);
+			var header = {};
+			stompClient.connect(
+				// header包含客户端的认证信息，若无需认证，直接使用空对象 “{}” 即可
+				header,
+				// 连接成功回调方法
+				function connectCallback(frame) {
+					append('连接成功' + frame);
+					// 初始订阅2种（queue & topic）消息
+					// 初始给JS对象headers赋一个值全局唯一id，订阅成功后自动将destination添加到headers中
+					var sub_topic_headers = {id: "sub-" + random(32, 16)}
+					subscription_topic = stompClient.subscribe('/topic/subscribeMsg', function (response) {
+						append('初始订阅，收到来自/topic/subscribeMsg的消息：' + response.body);
+		            }, sub_topic_headers);
+					append('初始订阅成功：' + JSON.stringify(sub_topic_headers));
+					var sub_queue_headers = {id: "sub-" + random(32, 16)};
+					subscription_queue = stompClient.subscribe('/user/queue/sendSelf', function (response){
+						append('初始订阅，收到来自/user/queue/sendSelf的消息：' + response.body);
+					}, sub_queue_headers);
+					append('初始订阅成功：' + JSON.stringify(sub_queue_headers));
+					// 将所有订阅成功的headers保存到全局数组中，后期退订时直接从数组中获取
+					sub_headers.push(sub_topic_headers);
+					sub_headers.push(sub_queue_headers);
+				},
+				// 连接失败回调方法
+				function errorCallback(error){
+					append('连接失败' + error);
+				}	
+			);
+		}
+		
+		function closeConn(){
+			if(stompClient != null){
+				stompClient.disconnect();
+			}
+			append('关闭连接');
+		}
+		
+		function send(){
+			var msg = document.getElementById('msg').value;
+			var msgtype = $("#msgtype").val();
+			var msgtx =  $("#msgtx").val();
+			if(stompClient != null && msg != null && msg != '' && msgtype != null && msgtype != '') {
+				// 浏览器将消息封装为JSON串传输到websocket服务器
+				var json = JSON.stringify({"msg": msg, "msgtype": msgtype, "msgtx": msgtx});
+				var suffix = msgtype == "queue" ? "/sendSelf" : "/sendMsg";
+				if(msgtx == '0'){
+					// 第一种方式：非事务控制方式发送
+					stompClient.send("/app"+suffix, {}, json);
+					append('非事务模式下，成功发送消息：'+json+'到'+"/app"+suffix);
+				} else {
+					// 第二种方式：事务控制方式发送
+					// 可自定义事务编号，后期通过txid来提交或回滚事务；也可让系统自动生产编号，通过调用begin()返回的JS对象来处理
+					var txid = "tx-" + random(32, 16);
+					var tx = stompClient.begin(txid);	// 开启事务
+					// 最关键的在于要在 headers 对象中加入事务 id，若没有添加，则会直接发送消息，不会以事务进行处理
+					stompClient.send("/app"+suffix, {transaction: tx.id}, json);
+					if(msgtx == '1'){
+						//tx.commit();	// 提交事务
+						stompClient.commit(txid);
+						append('事务提交模式下，发送消息：'+json+'到'+"/app"+suffix);
+					} else if (msgtx == '2'){
+						//tx.abort();		// 回滚事务
+						stompClient.abort(txid);
+						append('事务回滚模式下，发送消息：'+json+'到'+"/app"+suffix);
+					}
+				}
+			}
+		}
+
+		function clearMsg() {
+			$("#msg").val("");
+			$("#msgtype").val("");
+			$("#msgtx").val("0");
+		}
+
+		function subscribe() {
+			// 获取手工输入的destination
+			var dest = document.getElementById('dest').value;
+			if (stompClient != null && dest != null && dest != '') {
+				// 检查全局数组中是否已经订阅
+				if(destNotInSubHeaders(dest)){
+					var headers = {id: "sub-" + random(32, 16)};
+					stompClient.subscribe(dest, function(response) {
+						append('自定义订阅，收到来自' + dest + '的消息：'+ response.body);
+					}, headers);
+					append('自定义订阅成功：' + JSON.stringify(headers));
+					sub_headers.push(headers);
+				} else {
+					append("destination："+dest+"已经被订阅，无需重复订阅！");
+				}
+			}
+		}
+
+		function unsubscribe() {
+			// 第一种退订方式，基于订阅时返回的对象
+			//subscription_queue.unsubscribe();
+			//subscription_topic.unsubscribe();
+			// 第二种退订方式，基于订阅时标记的id
+			var dest = document.getElementById('dest').value;
+			if (stompClient != null && dest != null && dest != '') {
+				// 检查全局数组中是否已经订阅
+				if(destNotInSubHeaders(dest)){
+					append("destination："+dest+"不存在，退订失败！");
+				} else {
+					var id = getIdByDest(dest);
+					if(id != null && id != ''){
+						stompClient.unsubscribe(id);
+						delHeadersByDest(dest);
+						append("destination："+dest+"成功被当前客户端退订！");
+					}
+				}
+			}
+		}
+		
+		/**
+		 * 在消息提示域追加信息
+		 **/
+		function append(text){
+			$("#info").append("<li>"+text+"</li>")
+		}
+		
+		/**
+		 * 获取随机字符串
+		 * @param len 随机字符串长度
+		 * @param radix 字符串数据进制（二进制，八进制，十进制，十六进制）
+		 */
+		function random(len, radix){
+			 var s = []; 
+			 var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+			 if(len>0 && radix>0 && radix<=chars.length){
+				 for(var i=0; i<len; i++){
+					 s[i] = chars[Math.floor(Math.random() * radix)];
+				 } 
+			 }
+			 var uuid = s.join('');  
+			 return uuid;
+		}
+		
+		/* 
+		* 方法:Array.remove(dx) 通过遍历,重构数组 
+		* 功能:删除数组元素. 
+		* 参数:dx删除元素的下标. 
+		*/
+		Array.prototype.remove=function(dx){
+			if(isNaN(dx)||dx>this.length){return false;}
+			for(var i=0,n=0;i<this.length;i++){
+			    if(this[i]!=this[dx]){
+			    	this[n++]=this[i];
+			    }
+		  	}
+		  	this.length-=1;
+		} 
+		
+		/**
+		 * 判断指定的destination是否已经存在于全局数组中
+		 **/
+		function destNotInSubHeaders(dest){
+			//every()：判断数组中每一项都是否满足条件，只有所有项都满足条件，才会返回true
+			return sub_headers.every(function(headers) {
+				return headers.destination != dest;
+			});
+		}
+		
+		/**
+		 * 从全局数组中查找与destination绑定的id
+		 **/
+		function getIdByDest(dest){
+			var id;
+			if(destNotInSubHeaders(dest)){
+				id = null;
+			} else {
+				//forEach()：遍历数组中每个元素，直到找到匹配项为止
+				sub_headers.forEach(function(v, i){
+					if(v.destination == dest){
+						id = v.id;
+					}
+				});
+			}
+			return id;
+		}
+		
+		/**
+		 * 从全局数组中删除与destination绑定的header
+		 **/
+		function delHeadersByDest(dest){
+			sub_headers.forEach(function(v, i){
+				if(v.destination == dest){
+					sub_headers.remove(i);
+				}
+			});
+		}
+	</script>
+</html>
