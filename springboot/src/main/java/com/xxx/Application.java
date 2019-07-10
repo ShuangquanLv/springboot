@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * EnableScheduling 启用定时任务的配置
  * EnableJms 启动JMS（消息队列）
  * EnableRabbit 启用RabbitMQ（消息队列）
+ * EnableDiscoveryClient 启用Eureka或Consul，支持服务发现
  * */
 @SpringBootApplication
 @MapperScan("com.xxx.dao")
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableScheduling
 @EnableJms
 @EnableRabbit
+@EnableDiscoveryClient
 public class Application {
 	
 	public static void main(String[] args) {

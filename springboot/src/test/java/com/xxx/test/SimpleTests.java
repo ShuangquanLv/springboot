@@ -1,6 +1,8 @@
 package com.xxx.test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,9 +28,18 @@ public class SimpleTests {
 	@Test
 	public void testWechat(){
 		WechatRedPacket wechat = new WechatRedPacket();
-		for(int i=0; i<100; i++){
+		Map<Integer, Integer> summary = new HashMap<Integer, Integer>();
+		for(int i=0; i<1000; i++){
 			List<Float> list = wechat.split(300, 15);
 			logger.info(list.toString());
+			for(Float f: list) {
+				Integer j = f.intValue();
+				if(summary.containsKey(j)){
+					summary.put(j, summary.get(j)+1);
+				} else {
+					summary.put(j, 1);
+				}
+			}
 			float total = 0;
 			for(float f: list){
 				total += f;
@@ -36,6 +47,7 @@ public class SimpleTests {
 			total = wechat.floor(total);
 			logger.info("total="+total);
 		}
+		logger.info(summary.toString());
 	}
 
 }

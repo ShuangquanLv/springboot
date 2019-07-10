@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
@@ -33,11 +34,11 @@ import org.springframework.stereotype.Service;
  * 		2、消息定时和延迟发送投递
  * */
 @Service("activeMQProducer") 
+@Profile("prod")
 public class Producer {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	// 也可以注入JmsTemplate，JmsMessagingTemplate对JmsTemplate进行了封装  
 	@Autowired
     private JmsMessagingTemplate jmsMessagingTemplate;
 	@Autowired

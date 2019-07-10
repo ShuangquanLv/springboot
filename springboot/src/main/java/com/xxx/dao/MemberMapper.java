@@ -3,9 +3,6 @@ package com.xxx.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.springframework.stereotype.Component;
 
 import com.xxx.model.Member;
 
@@ -17,7 +14,6 @@ public interface MemberMapper {
 
 	int insertSelective(Member record);
 
-	//@Select("select * from p2p_member where memid = #{memid}")
 	Member selectByPrimaryKey(String memid);
 
 	int updateByPrimaryKeySelective(Member record);

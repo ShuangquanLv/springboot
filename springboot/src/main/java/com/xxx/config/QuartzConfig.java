@@ -13,15 +13,16 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 /**
  * 定时任务配置（从quartz.properties配置文件获取各个参数项）
+ * Springboot2.x已集成quartz，无需自定义quartz.properties，已将参数迁移到appliation.yml
  * */
 
-@Configuration
+//@Configuration
 public class QuartzConfig {
 	
 	/**
 	 * 将Properties对象赋值到SchedulerFactoryBean并返回
 	 * */
-	@Bean(name="SchedulerFactory")
+	//@Bean(name="SchedulerFactory")
     public SchedulerFactoryBean schedulerFactoryBean() throws IOException {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setQuartzProperties(quartzProperties());
@@ -31,7 +32,7 @@ public class QuartzConfig {
 	/**
 	 * 从quartz.properties配置文件中读取参数并返回Properties对象
 	 * */
-	@Bean
+	//@Bean
     public Properties quartzProperties() throws IOException {
         PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
         propertiesFactoryBean.setLocation(new ClassPathResource("com/xxx/config/quartz.properties"));
@@ -43,7 +44,7 @@ public class QuartzConfig {
 	/**
      * quartz初始化监听器
      */
-    @Bean
+    //@Bean
     public QuartzInitializerListener executorListener() {
        return new QuartzInitializerListener();
     }
@@ -51,7 +52,7 @@ public class QuartzConfig {
     /**
      * 通过SchedulerFactoryBean获取Scheduler的实例
      */
-    @Bean(name="Scheduler")
+    //@Bean(name="Scheduler")
     public Scheduler scheduler() throws IOException {
         return schedulerFactoryBean().getScheduler();
     }

@@ -2,7 +2,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <!-- 使用Maven构建Spring Boot项目 -->
-  
   <modelVersion>4.0.0</modelVersion>
   <groupId>com</groupId>
   <artifactId>springboot</artifactId>
@@ -15,16 +14,19 @@
   <parent>
 	  <groupId>org.springframework.boot</groupId>
 	  <artifactId>spring-boot-starter-parent</artifactId>
-	  <version>1.5.6.RELEASE</version><!-- 版本非常关键 -->
+	  <version>2.1.0.RELEASE</version><!-- 版本非常关键，旧版1.5.6.RELEASE -->
 	  <relativePath/> <!-- lookup parent from repository -->
-  </parent>
+  </parent> 
   
   <!-- 声明相应依赖的版本信息 -->
   <properties>
-	  <java.version>1.7</java.version>
+	  <java.version>1.8</java.version>
 	  <hadoop.version>2.6.5</hadoop.version>
+	  <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
 	  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	  <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	  <!-- maven打包跳过测试 -->
+	  <skipTests>true</skipTests>
   </properties>
   
   <dependencies>
@@ -54,10 +56,22 @@
 		  <groupId>org.springframework.boot</groupId>
 		  <artifactId>spring-boot-starter-actuator</artifactId>
 	  </dependency>
+	       <dependency>
+		   <groupId>io.projectreactor</groupId>
+		   <artifactId>reactor-core</artifactId>
+		   <version>3.2.10.RELEASE</version>
+	  </dependency>
+	  <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-webflux</artifactId>
+      </dependency>
+	  <!-- security权限控制 -->
+	  <!--  
 	  <dependency>
 		  <groupId>org.springframework.boot</groupId>
 		  <artifactId>spring-boot-starter-security</artifactId>
 	  </dependency>
+	  -->
 	  <!-- thymeleaf模板引擎 -->
 	  <dependency>
          <groupId>org.springframework.boot</groupId>
@@ -68,12 +82,24 @@
          <artifactId>mybatis-spring-boot-starter</artifactId>
          <version>1.3.0</version>
      </dependency>
-     <!-- Redis数据库 -->
+     <!-- Redis -->
      <dependency>
 	    <groupId>org.springframework.boot</groupId>
-	    <artifactId>spring-boot-starter-redis</artifactId>
-	    <version>1.3.6.RELEASE</version>
+	    <artifactId>spring-boot-starter-data-redis</artifactId>
+	    <!-- 1.5的版本默认采用的连接池技术是jedis  2.0以上版本默认连接池是lettuce, 在这里采用jedis，所以需要排除lettuce的jar -->
+	    <exclusions>
+	        <exclusion>
+	            <groupId>io.lettuce</groupId>
+	            <artifactId>lettuce-core</artifactId>
+	        </exclusion>
+	    </exclusions>
 	</dependency>
+	<!-- Redis客户端jedis -->
+	<dependency>
+	    <groupId>redis.clients</groupId>
+	    <artifactId>jedis</artifactId>
+	</dependency>
+	<!-- Redisson -->
 	<dependency>
         <groupId>org.redisson</groupId>
         <artifactId>redisson</artifactId>
@@ -98,12 +124,12 @@
 	<dependency>
 	    <groupId>com.alibaba</groupId>
 	    <artifactId>druid</artifactId>
-	    <version>1.0.11</version>
+	    <version>1.1.3</version>
 	</dependency> 
 	<dependency>
 	    <groupId>com.alibaba</groupId>
 	    <artifactId>druid-spring-boot-starter</artifactId>
-	    <version>1.1.0</version>
+	    <version>1.1.13</version>
 	</dependency>
 	<dependency>
 		<groupId>com.alibaba</groupId>
@@ -114,7 +140,7 @@
      <dependency>
          <groupId>com.github.pagehelper</groupId>
          <artifactId>pagehelper-spring-boot-starter</artifactId>
-         <version>1.1.2</version>
+         <version>1.2.5</version>
      </dependency>
      <!-- XML解析器fasterxml -->
      <dependency>
@@ -157,14 +183,8 @@
 	</dependency>
 	<!-- 定时任务quartz -->
 	<dependency>
-	    <groupId>org.quartz-scheduler</groupId>
-	    <artifactId>quartz</artifactId>
-	    <version>2.2.3</version>
-	</dependency>
-	<dependency>
-	    <groupId>org.quartz-scheduler</groupId>
-	    <artifactId>quartz-jobs</artifactId>
-	    <version>2.2.3</version>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-quartz</artifactId>
 	</dependency>
 	<!-- 安全框架Shiro -->
 	<dependency>
@@ -211,75 +231,104 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
+		<!-- springboot admin监控客户端 -->
+		<dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <!-- Eureka 服务注册、发现 --> 
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <!-- Consul 服务注册、发现 -->
+        <!--
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+        </dependency>
+        -->
+        <!-- zipkin+sleuth 服务追踪 -->
+        <!-- 使用http方式收集 -->
+        <!-- 
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-sleuth-zipkin</artifactId>
+        </dependency>
+        --> 
+        <dependency>
+		    <groupId>org.springframework.cloud</groupId>
+		    <artifactId>spring-cloud-starter-zipkin</artifactId>
+		</dependency>
+		<!-- 使用rabbit方式收集 -->
+		<dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+        </dependency>
+        <!-- devtool 热部署 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+            <scope>runtime</scope>
+        </dependency>
   </dependencies>
   
-  <build>
-    <finalName>springboot</finalName>
-    <plugins>
-    	<plugin>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>repackage</goal>
-                </goals>
-              </execution>
-            </executions>
-            <dependencies>
-            	<!-- 热部署功能 -->
-                <dependency>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>springloaded</artifactId>
-                    <version>1.2.5.RELEASE</version>
-                </dependency>
-            </dependencies>
-        </plugin>
-        <!-- mybatis generator 自动生成代码插件 -->
-        <plugin>
-            <groupId>org.mybatis.generator</groupId>
-            <artifactId>mybatis-generator-maven-plugin</artifactId>
-            <version>1.3.2</version>
-            <configuration>
-                <configurationFile>${basedir}/src/main/resources/generator/generatorConfig.xml</configurationFile>
-                <overwrite>true</overwrite>
-                <verbose>true</verbose>
-            </configuration>
-        </plugin>
-        <!-- 过滤后缀为pem、pfx的证书文件 -->
-        <!--  
-        <plugin>
-		    <groupId>org.apache.maven.plugins</groupId>
-		    <artifactId>maven-resources-plugin</artifactId>
-		    <configuration><encoding>UTF-8</encoding>
-		        <nonFilteredFileExtensions>
-		            <nonFilteredFileExtension>cer</nonFilteredFileExtension>
-		            <nonFilteredFileExtension>pem</nonFilteredFileExtension>
-		            <nonFilteredFileExtension>pfx</nonFilteredFileExtension>
-		            <nonFilteredFileExtension>p12</nonFilteredFileExtension>
-		        </nonFilteredFileExtensions>
-		    </configuration>
-		</plugin>
-		-->
-    </plugins>
-    <!--防止mavan打包时遗漏xml和properties文件 -->
-    <resources>
-	    <resource>
-	    	<directory>src/main/java</directory>
-	      		<includes>
-	        		<include>**/*.properties</include>
-                    <include>**/*.xml</include>
-	      		</includes>
-	      		<filtering>true</filtering>
-	    </resource>
-	    <resource>
-	      	<directory>src/main/resources</directory>
-	      		<includes>
-	        		<include>**/*</include>
-	      		</includes>
-	      		<filtering>true</filtering>
-	    </resource>
-  	</resources>
-  </build>
-  
+  	<!-- spring cloud -->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<!-- spring boot官方自带maven插件 -->
+	<build>
+		<finalName>provider</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<!-- 如果没有配置fork=true，则devtool热部署就不生效 -->
+					<fork>true</fork>
+					<mainClass>com.xxx.Application</mainClass>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<!-- 防止mavan打包遗漏xml和properties文件 -->
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.properties</include>
+					<include>**/*.xml</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
 </project>

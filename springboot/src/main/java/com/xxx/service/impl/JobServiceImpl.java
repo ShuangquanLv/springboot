@@ -39,8 +39,8 @@ public class JobServiceImpl implements JobService{
 	@Autowired
 	private QuartzConfigMapper quartzConfigMapper;
 	
-	//加入Qulifier注解，通过名称注入bean
-    @Autowired @Qualifier("Scheduler")
+	//springboot2.x开始自动注入scheduler
+    @Autowired
     private Scheduler scheduler;
 
 	

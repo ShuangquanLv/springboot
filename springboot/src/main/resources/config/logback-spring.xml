@@ -7,13 +7,15 @@
     <property name="LOG_PREFIX" value="springboot"/>
     <property name="LOG_DIR" value="${LOG_HOME}/%d{yyyyMMdd}"/>
     <!--输出在控制台的格式-->
-    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-15.15t] [%c] %m%n"/>
+    <property name="LOG_PATTERN" value="%d{MM-dd HH:mm:ss.SSS} [%-5p] [%-15.15t] [%c:%L] %m%n"/>
+    <!--输出带traceId格式-->
+    <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5p] [%X{X-B3-TraceId:-},%X{X-B3-SpanId:-}] [%-15.15t] [%c.%M:%L] %m%n"/>
     <!--文件的最大值-->
     <property name="MAX_FILE_SIZE" value="50MB"/>
     <!--配置控制台输出-->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>${LOG_PATTERN}</pattern>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
         </layout>
     </appender>
     <!--配置所有日志文件-->
@@ -30,7 +32,7 @@
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>${LOG_PATTERN}</pattern>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
         </layout>
     </appender>
     <!--配置错误日志文件的位置-->
@@ -54,9 +56,31 @@
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>${LOG_PATTERN}</Pattern>
+            <Pattern>${FILE_LOG_PATTERN}</Pattern>
         </layout>
     </appender>
+    
+    <!--配置所有SQL单独输出到一个文件-->
+    <appender name="SQL_ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--日志文件的位置-->
+        <File>${LOG_HOME}/${LOG_PREFIX}-sql.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--定义了日志的切分方式——把每一天的日志归档到一个文件中-->
+            <FileNamePattern>${LOG_DIR}/${LOG_PREFIX}-sql%i.log</FileNamePattern>
+            <!--只保留最近90天的日志-->
+        	<maxHistory>90</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </layout>
+    </appender>
+    <!-- additivity必须设置为false，否则不光新的sql日志文件会存储SQL日志，原业务日志（root）文件也会存储 -->
+    <logger name="com.xxx.dao" level="DEBUG" additivity="false">
+      <appender-ref ref="SQL_ALL" />
+ 	</logger>
     
     <!-- 测试环境+开发环境. 多个使用逗号隔开. -->
     <springProfile name="test,dev">

@@ -33,6 +33,7 @@ Spring Boot
  	4.6, Jedis(Redis客户端java版实现) --- Done
  	4.7, Redisson(分布式操作的Redis客户端java版实现) --- None
  	4.8, Redis哨兵sentinel --- Done
+ 	4.9, Session共享
 
 5, Spring Boot整合Shiro安全框架
 
@@ -81,17 +82,18 @@ Spring Boot
 	14.2、添加https配置
 	14.3、http访问自动跳转到https	
 
-5, eclipse安装插件
+15, eclipse安装插件
 	3.1, mybatis generator
 	3.2, google浏览器报文模拟器Postman --- Done
 	3.3, Markdown编辑器插件
+	3.4, egit代码协调工具Github插件   --- Done
 	
-6, curl命令（基于URL语法传输数据的命令行工具和库） --- Done
+16, curl命令（基于URL语法传输数据的命令行工具和库） --- Done
 	6.1, 下载安装（https://curl.haxx.se/download.html, E:\Soft\curl-7.58.0\src\curl.exe）
 	6.2, 发送shutdown信号： curl -X POST host:port/shutdown
 	6.3, 权限控制下发送shutdown信号： curl -u username:password -X POST url:port/XXXXXX/shutdown	
 
-Spring Cloud --- 微服务架构（http://blog.csdn.net/forezp/article/details/70148833）
+17, Spring Cloud --- 微服务架构（http://blog.csdn.net/forezp/article/details/70148833）
 	Eureka --- 负责服务的注册与发现，将服务连接起来
 	Ribbon, Feign --- 负载均衡客户端
 	Hystrix --- 断路器，负责监控服务之间的调用情况，连续多次失败进行熔断保护
@@ -106,5 +108,9 @@ Spring Cloud --- 微服务架构（http://blog.csdn.net/forezp/article/details/7
 Vert.x	
 
 Node.js+Express
+
+Weblogic安装、部署和监控
 	
-egit		
+18, Springboot整合Vue	
+
+19, Activiti工作流

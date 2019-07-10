@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xxx.dao.UserMapper">
-  <resultMap id="BaseResultMap" type="com.xxx.model.User">
-  	 <result column="USERID" jdbcType="VARCHAR" property="userid" />
-  	 <result column="NAME" jdbcType="VARCHAR" property="name" />
-  	 <result column="TELEPHONE" jdbcType="VARCHAR" property="telephone" />
-  	 <result column="EMAIL" jdbcType="VARCHAR" property="email" />
-  </resultMap>
   <!-- 查询用户 -->
+  <!-- 列名大小写对应到map的key值大小写 -->
   <select id="getUsers" parameterType="java.util.HashMap" resultType="java.util.HashMap">
-   	select USERID, NAME, TELEPHONE, EMAIL from p2p_user 
+   	select userid, name, telephone, email from p2p_user 
    	<where>
    		<if test="name != null and name != ''">
    			and name = #{name}
    		</if>
    		<if test="telephone != null and telephone != ''">
    			and telephone = #{telephone}
+   		</if>
+   		<if test="sex != null and sex != ''">
+   			and sex = #{sex}
    		</if>
    	</where> 
   </select>

@@ -21,7 +21,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.alibaba.fastjson.JSON;
 import com.xxx.Application;
 import com.xxx.entity.Status;
-import com.xxx.jms.activemq.Consumer;
 import com.xxx.jms.activemq.Producer;
 import com.xxx.service.JedisService;
 import com.xxx.util.StringUtil;
@@ -54,7 +53,7 @@ public class ApplicationTests {
 	/**
      * 测试Redis缓存
      * */
-	@Ignore
+	@Test
     public void testRedis() throws Exception {
 		ValueOperations<String, String> vos = stringRedisTemplate.opsForValue();
         // 保存key-value键值对(默认永久有效)
@@ -181,7 +180,7 @@ public class ApplicationTests {
     /**
      * 测试RabbitMQ
      * */
-    @Test
+    @Ignore
     public void testRabbitMQ(){
     	String exchange = "direct.exchange.default";
     	String routingKey = "routing.default";

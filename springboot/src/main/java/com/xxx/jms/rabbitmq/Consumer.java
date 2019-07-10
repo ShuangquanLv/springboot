@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.api.ChannelAwareMessageListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -74,7 +74,7 @@ public class Consumer {
 	
 	@RabbitListener(queues = {
 			"topic.queue"
-			,"topic.queue.default"
+//			,"topic.queue.default"
 //			,"topic.queue.A" 
 //			,"topic.queue.B" 
 	})

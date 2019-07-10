@@ -1,6 +1,7 @@
 package com.xxx.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.xxx.dao.MemberMapper;
+import com.xxx.dao.UserMapper;
+import com.xxx.entity.ResultBean;
+import com.xxx.entity.ResultSuccessBean;
 import com.xxx.model.Member;
 import com.xxx.service.MemberService;
 
@@ -20,6 +24,8 @@ public class MemberServiceImpl implements MemberService{
 	
 	@Autowired
 	private MemberMapper memberMapper;
+	@Autowired
+	private UserMapper userMapper;
 	
 	/**
 	 * 添加会员
@@ -61,5 +67,20 @@ public class MemberServiceImpl implements MemberService{
 	@Transactional
 	public int updateMember(Member member){
 		return memberMapper.updateByPrimaryKeySelective(member);
+	}
+	
+	/**
+	 * 按条件查询会员
+	 * */
+	public ResultBean query(Map<Object, Object> params) {
+		ResultBean rb = new ResultSuccessBean("查询会员成功");
+		if(params.containsKey("pageNum") && params.containsKey("pageSize")) {
+			int pageNum = Integer.parseInt(params.get("pageNum").toString());
+			int pageSize = Integer.parseInt(params.get("pageSize").toString());
+			PageHelper.startPage(pageNum, pageSize);
+		}
+		List<Map<Object, Object>> data = userMapper.getUsers(params);
+		rb.setData(data);
+		return rb;
 	}
 }
