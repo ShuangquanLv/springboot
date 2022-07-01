@@ -21,7 +21,7 @@
   <!-- 声明相应依赖的版本信息 -->
   <properties>
 	  <java.version>1.8</java.version>
-	  <hadoop.version>2.6.5</hadoop.version>
+	  <hadoop.version>2.7.0</hadoop.version>
 	  <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
 	  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	  <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
